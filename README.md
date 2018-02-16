@@ -18,7 +18,7 @@
 Clone this repository to your home directory or wherever you want:
 
 ```bash
-cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
+$ cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
 ```
 
 Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and paste it into `api_key.txt` file in this repository with your favourite editor.
@@ -26,13 +26,13 @@ Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&a
 And run the continuous one by:
 
 ```bash
-python display_contiuously.py
+$ python display_contiuously.py
 ```
 
 Or just once:
 
 ```bash
-python display_once.py
+$ python display_once.py
 ```
 
 <br> 
