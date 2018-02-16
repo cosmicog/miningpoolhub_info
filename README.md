@@ -12,7 +12,14 @@
 
 ## Usage
 
-### :penguin: Linux 
+### :penguin: Ubuntu 16.04
+
+First, we need to install its dependency, (if you don't have pip, do `sudo apt -y install python3-pip`):
+
+```bash
+sudo -H pip3 install dashing
+```
+
 Clone this repository to your home directory or wherever you want:
 
 ```bash
