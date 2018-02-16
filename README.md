@@ -16,8 +16,6 @@ Python application to run on terminal and display information about your mining 
 ```cpp
 0xc5b82006d2aba5269d2f8ca6d1dc81d3331c3c02
 ```
-<br>
-<br>
 
 ## Usage
 
