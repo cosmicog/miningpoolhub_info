@@ -1,7 +1,5 @@
 Python application to run on terminal and display information about your mining status on [miningpoolhub](https://miningpoolhub.com) with your API key.
 
-<br>
-
 ### Donation :dollar: :euro: :pound: :yen:
 
 <br>
