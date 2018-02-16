@@ -1,4 +1,4 @@
-### Donation :dollar: :euro: :pound: :yen:
+## Donation :dollar: :euro: :pound: :yen:
 
 <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="15" height="15"/>  Donate **Bitcoin** to this address:
 ```cpp
