@@ -1,5 +1,3 @@
-Python application to run on terminal and display information about your mining status on [miningpoolhub](https://miningpoolhub.com) with your API key.
-
 ### Donation :dollar: :euro: :pound: :yen:
 
 <br>
@@ -8,7 +6,6 @@ Python application to run on terminal and display information about your mining 
 ```cpp
 3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
 ```
-<br>
 
 <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="15" height="15"/>  Donate **Ethereum** to this address
 ```cpp
