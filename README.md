@@ -44,7 +44,7 @@ $ python display_once.py
 
 ### :shit: Windows 10
 
-_Coming soon._ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1&q=python+hello+world+windows) :trollface: and remember donating to above adresses too :kissing_heart:
+_Coming soon._ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1&q=python+hello+world+windows) :trollface: 
 
 
 
