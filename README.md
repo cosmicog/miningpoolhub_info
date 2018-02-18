@@ -14,7 +14,7 @@
 
 ### :penguin: Ubuntu 16.04
 
-First, we need to install its dependency, (if you don't have pip3, do `sudo apt install python3-pip`):
+First, we need to install its dependencies, (if you don't have pip3, do `sudo apt install python3-pip`):
 
 ```bash
 sudo -H pip3 install colorclass terminaltables
