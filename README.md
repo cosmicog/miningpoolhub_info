@@ -10,6 +10,11 @@
 0xc5b82006d2aba5269d2f8ca6d1dc81d3331c3c02
 ```
 
+## Screenshot
+Here is screenshot of info when running once:
+
+![Screenshot of info when running once](https://user-images.githubusercontent.com/9158844/36348577-7e96893a-1483-11e8-970f-f35df4ae71a0.png)
+
 ## Usage
 
 ### :penguin: Ubuntu 16.04
