@@ -39,7 +39,7 @@ And run the single one by:
 $ python3 display_once.py -a PASTE_YOUR_API_KEY_HERE
 ```
 
-Or run with your extra favourite currency (TRY below):
+Or run with your extra favourite currency (**TRY below**):
 
 ```bash
 $ python3 display_once.py -a PASTE_YOUR_API_KEY_HERE -f TRY
