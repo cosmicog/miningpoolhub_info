@@ -100,7 +100,7 @@ class MphInfo:
                 coins[symbol + "_fiat_my_cur"] = self.getValueInOtherCurrency(symbol, balance, self.fcur_, True)
 
 
-        total_usd = self.getValueInOtherCurrency('BTC', total_fav_crypto, 'USD', True)
+        total_usd = self.getValueInOtherCurrency(self.cur_, total_fav_crypto, 'USD', True)
         table_data = []
 
         fave_crypto_sign = 'Ƀ'
