@@ -71,7 +71,7 @@ class MphInfo:
 
         coins = {}
 
-        total_btc = 0.0
+        total_fav_crypto = 0.0
 
         for coin in json_dict["getuserallbalances"]["data"]:
             symbol = self.crypto_symbols_[coin["coin"]]
@@ -88,16 +88,21 @@ class MphInfo:
             coins[symbol + "_exchange"] = balance_ex
             coin_total_balance = balance + balance_ex
 
-            total_btc += self.getValueInOtherCurrency(symbol, coin_total_balance, 'BTC', True)
+            total_fav_crypto += self.getValueInOtherCurrency(symbol, coin_total_balance, self.cur_, True)
             coins[symbol + "_fiat_usd"] = self.getValueInOtherCurrency(symbol, balance, 'USD', True)
             if self.other_cur:
                 coins[symbol + "_fiat_my_cur"] = self.getValueInOtherCurrency(symbol, balance, self.fcur_, True)
 
 
-        total_usd = self.getValueInOtherCurrency('BTC', total_btc, 'USD', True)
+        total_usd = self.getValueInOtherCurrency('BTC', total_fav_crypto, 'USD', True)
         table_data = []
 
-        title =[Color('{autoyellow}Total Balance{/autoyellow}\nɃ{autocyan}' + str("%.6f" % total_btc) + '{/autocyan}\n${autogreen}' + str("%.6f" % total_usd) + '{/autogreen}'),
+        fave_crypto_sign = 'Ƀ'
+
+        if self.cur_ != 'BTC':
+            fave_crypto_sign = self.cur_
+
+        title =[Color('{autoyellow}Total Balance{/autoyellow}\n'+ fave_crypto_sign +'{autocyan}' + str("%.6f" % total_fav_crypto) + '{/autocyan}\n${autogreen}' + str("%.6f" % total_usd) + '{/autogreen}'),
                 Color('{autoyellow}Wallet{/autoyellow}\n{autoyellow}Confirmed+{/autoyellow}\n{autoyellow}Unconfirmed{/autoyellow}'),
                 Color('{autoyellow}Exchange+{/autoyellow}\n{autoyellow}AE_Conf+{/autoyellow}\n{autoyellow}AE_Unconf{/autoyellow}'),
                 Color('{autoyellow}Total{/autoyellow}\n{autoyellow}USD{/autoyellow}\n{autoyellow}Value{/autoyellow}'),
