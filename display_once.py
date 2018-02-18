@@ -34,7 +34,13 @@ class MphInfo:
         self.balances_table_ = SingleTable([])
 
         # Print Balances
+        self.getBalances()
         self.printBalances()
+
+
+    def printBalances(self):
+        print()
+        print(self.balances_table_.table)
 
     def getMphJsonDict(self, method, coin=False, id=False):
         if coin == False and id == False:
@@ -63,7 +69,7 @@ class MphInfo:
             sys.stdout.write(info)
             sys.stdout.flush()
 
-    def printBalances(self):
+    def getBalances(self):
 
         self.printDotInfo('Getting values and converting to other currencies...')
 
@@ -148,8 +154,6 @@ class MphInfo:
         self.balances_table_.inner_heading_row_border = False
         self.balances_table_.inner_row_border = True
         self.balances_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center'}
-        print()
-        print (self.balances_table_.table)
 
     # I just don't wanna see this lazy code in constructor lol
     def setSymbols(self):
