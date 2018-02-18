@@ -14,10 +14,10 @@
 
 ### :penguin: Ubuntu 16.04
 
-First, we need to install its dependency, (if you don't have pip, do `sudo apt -y install python3-pip`):
+First, we need to install its dependency, (if you don't have pip3, do `sudo apt install python3-pip`):
 
 ```bash
-sudo -H pip3 install dashing
+sudo -H pip3 install colorclass terminaltables
 ```
 
 Clone this repository to your home directory or wherever you want:
@@ -28,16 +28,22 @@ $ cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
 
 Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and paste it into `api_key.txt` file in this repository with your favourite editor.
 
-And run the continuous one by:
+And run the single one by:
 
 ```bash
-$ python display_contiuously.py
+$ python3 display_once.py -a PASTE_YOUR_API_KEY_HERE
 ```
 
-Or just once:
+Or run with your extra favourite currency (TRY below):
 
 ```bash
-$ python display_once.py
+$ python3 display_once.py -a PASTE_YOUR_API_KEY_HERE -f TRY
+```
+
+Or continuous one:
+
+```bash
+Coming soon...
 ```
 
 <br> 
