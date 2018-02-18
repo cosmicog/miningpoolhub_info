@@ -1,15 +1,3 @@
-## Donation :dollar: :euro: :pound: :yen:
-
-<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="15" height="15"/>  Donate **Bitcoin** to this address:
-```cpp
-3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
-```
-
-<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="15" height="15"/>  Donate **Ethereum** to this address:
-```cpp
-0xc5b82006d2aba5269d2f8ca6d1dc81d3331c3c02
-```
-
 ## Screenshot
 Here is screenshot of info when running once:
 
@@ -71,5 +59,20 @@ usage: display_once.py [-h] -a api_key [-i id] [-c crypto_currency]
 
 _Coming soon._ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1&q=python+hello+world+windows) :trollface: 
 
+## Donation :dollar: :euro: :pound: :yen:
 
+<img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="20" height="20"/>   Donate **Zcash** to this address:
+```python
+t1Udd4itgQV7nirhLTjZCRrkrqU8Ez5Wbi5
+```
+
+<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="20" height="20"/>   Donate **Bitcoin** to this address:
+```cpp
+3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
+```
+
+<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="20" height="20"/>   Donate **Ethereum** to this address:
+```
+0xc5b82006d2aba5269d2f8ca6d1dc81d3331c3c02
+```
 
