@@ -50,6 +50,20 @@ Or continuous one:
 ```bash
 Coming soon...
 ```
+Here is all options:
+```bash
+$ python3 display_once.py --help
+usage: display_once.py [-h] -a api_key [-i id] [-c crypto_currency]
+                       [-f fiat_currency]
+
+  -h, --help          show this help message and exit
+  -a api_key          API KEY from 'Edit Account' page
+  -i id               USER ID from 'Edit Account' page
+  -c crypto_currency  Which exchange currency to display total in (default
+                      BTC)
+  -f fiat_currency    Not needed, extra column for displaying other fiat
+                      currency total (default TRY)
+```
 
 <br> 
 
