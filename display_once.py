@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+
+import time
+
 from colorclass import Color, Windows
 from terminaltables import SingleTable
-import requests
 import argparse
-import json
-import time
+import requests
+import sys
 
 parser = argparse.ArgumentParser(description="MINING\nPOOL\nHUB\nInformation Gatherer")
 parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page')
 parser.add_argument('-i', metavar='id', help='USER ID from \'Edit Account\' page')
-parser.add_argument('-c', metavar='currency', default='btc', help='Which exchange currency to display total in (default btc)')
-parser.add_argument('-f', metavar='fiat_currency', default='usd', help='Which fiat currency to display total in')
+parser.add_argument('-c', metavar='crypto_currency', default='BTC', help='Which exchange currency to display total in (default BTC)')
+parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total (default TRY)')
 args = parser.parse_args()
 
 class MphInfo:
@@ -22,71 +24,131 @@ class MphInfo:
         self.id_      = id
         self.cur_     = currency
         self.fcur_    = fiat_currency
-        self.symbols_ = {}
+        self.crypto_symbols_ = {}
         self.setSymbols()
+
+        self.other_cur = False
+        if args.f != None:
+            self.other_cur = True
+
+        self.balances_table_ = SingleTable([])
 
         # Print Balances
         self.printBalances()
 
-    def getJson(self, method, coin=False, id=False):
+    def getMphJsonDict(self, method, coin=False, id=False):
         if coin == False and id == False:
             url="https://{}miningpoolhub.com/index.php?page=api&action={}&api_key={}&id={}".format("", method, self.key_, "")
-            raw_response = requests.get(url).text
-            response = json.loads(raw_response)
-            return response
+            response = requests.get(url, timeout=10)
+            json_dict = response.json()
+            return json_dict #response
 
-    def getValueInOurCoin(self, symbol, amount, compare=args.c):
-        if symbol.upper() == compare.upper():
+    def getValueInOtherCurrency(self, curency, amount, other_currency, use_dot=None):
+        if curency.upper() == other_currency.upper(): # No need to convert
             return amount
-        url = "https://api.cryptonator.com/api/ticker/{}-{}".format(symbol.lower(), compare.lower())
-        raw_response = requests.get(url).text
-        response = json.loads(raw_response)
-        price = response["ticker"]["price"]
+        url = "https://min-api.cryptocompare.com/data/price?fsym={}&tsyms={}".format(curency.upper(), other_currency.upper())
+        response = requests.get(url, timeout=10)
+        json_dict = response.json()
+        price = json_dict[other_currency.upper()]
         value = float(price) * float(amount)
+        if use_dot != None:
+            self.printDotInfo()
         return value
 
+    def printDotInfo(self, info=None):
+        if info == None:
+            sys.stdout.write('.')
+            sys.stdout.flush()
+        else:
+            sys.stdout.write(info)
+            sys.stdout.flush()
 
     def printBalances(self):
 
-        response = self.getJson("getuserallbalances")
+        self.printDotInfo('Getting values and converting to other currencies...')
+
+        json_dict = self.getMphJsonDict("getuserallbalances")
 
         coins = {}
-        for coin in response["getuserallbalances"]["data"]:
-            symbol = self.symbols_[coin["coin"]]
+
+        total_btc = 0.0
+
+        for coin in json_dict["getuserallbalances"]["data"]:
+            symbol = self.crypto_symbols_[coin["coin"]]
             balance = sum([
               coin["confirmed"],
-              coin["unconfirmed"],
+              coin["unconfirmed"]
+             ])
+            balance_ex = sum([
               coin["ae_confirmed"],
               coin["ae_unconfirmed"],
               coin["exchange"]
              ])
-            coins[symbol] = balance
+            coins[symbol + "_balance"] = balance
+            coins[symbol + "_exchange"] = balance_ex
+            coin_total_balance = balance + balance_ex
 
-        dummybtc = 0.99999999
-        dummyusd = 998.88888888
-
-        table_data = [
-            [Color('{autoyellow}Total Balance{/autoyellow}\n{autocyan}' + str(dummybtc) + '{/autocyan} BTC\n{autogreen}' + str(dummyusd) + '{/autogreen} USD'),
-             Color('{autoyellow}Wallet{/autoyellow}\n{autoyellow}Total{/autoyellow}\n{autoyellow}Value{/autoyellow}'),
-             Color('{autoyellow}Total{/autoyellow}\n{autoyellow}USD{/autoyellow}\n{autoyellow}Value{/autoyellow}'),
-             Color('{autoyellow}Exchange{/autoyellow}\n{autoyellow}Total{/autoyellow}\n{autoyellow}Value{/autoyellow}'),
-            ], # Title
+            total_btc += self.getValueInOtherCurrency(symbol, coin_total_balance, 'BTC', True)
+            coins[symbol + "_fiat_usd"] = self.getValueInOtherCurrency(symbol, balance, 'USD', True)
+            if self.other_cur:
+                coins[symbol + "_fiat_my_cur"] = self.getValueInOtherCurrency(symbol, balance, self.fcur_, True)
 
 
-            [Color('{autocyan}Bitcoin{/autocyan}'),        Color( str(dummybtc)), Color('{autogreen}' + str(dummyusd) + '{/autogreen}'), Color('{autored}' + str(dummybtc) + '{/autored}')],
-            [Color('{autocyan}Zcash{/autocyan}'),          Color( str(dummybtc)), Color('{autogreen}' + str(dummyusd) + '{/autogreen}'), Color('{autored}' + str(dummybtc) + '{/autored}')],
-            [Color('{autocyan}Digibyte-Skein{/autocyan}'), Color( str(dummybtc)), Color('{autogreen}' + str(dummyusd) + '{/autogreen}'), Color('{autored}' + str(dummybtc) + '{/autored}')],
-            [Color('{autocyan}Zclassic{/autocyan}'),       Color( str(dummybtc)), Color('{autogreen}' + str(dummyusd) + '{/autogreen}'), Color('{autored}' + str(dummybtc) + '{/autored}')],
-        ]
-        table_instance = SingleTable(table_data)
-        table_instance.inner_heading_row_border = False
-        table_instance.inner_row_border = True
-        table_instance.justify_columns = {0: 'center', 1: 'center', 2: 'center'}
-        print (table_instance.table)
+        total_usd = self.getValueInOtherCurrency('BTC', total_btc, 'USD', True)
+        table_data = []
+
+        title =[Color('{autoyellow}Total Balance{/autoyellow}\nɃ{autocyan}' + str("%.6f" % total_btc) + '{/autocyan}\n${autogreen}' + str("%.6f" % total_usd) + '{/autogreen}'),
+                Color('{autoyellow}Wallet{/autoyellow}\n{autoyellow}Confirmed+{/autoyellow}\n{autoyellow}Unconfirmed{/autoyellow}'),
+                Color('{autoyellow}Exchange+{/autoyellow}\n{autoyellow}AE_Conf+{/autoyellow}\n{autoyellow}AE_Unconf{/autoyellow}'),
+                Color('{autoyellow}Total{/autoyellow}\n{autoyellow}USD{/autoyellow}\n{autoyellow}Value{/autoyellow}'),
+             ]
+
+        if self.other_cur:
+            title.append(Color('{autoyellow}Total{/autoyellow}\n{autoyellow}' + self.fcur_ + '{/autoyellow}\n{autoyellow}Value{/autoyellow}'))
+
+        table_data.append(title)
+
+        for coin in json_dict["getuserallbalances"]["data"]:
+            symbol = self.crypto_symbols_[coin["coin"]]
+
+            coin_line = [
+                    Color('{autocyan}' + coin["coin"].title() + '{/autocyan}'),
+                    Color( str(coins[symbol + '_balance'])),
+                    Color('{autored}' + str(coins[symbol + '_exchange']) + '{/autored}'),
+                    Color('${autogreen}' + str("%.2f" % coins[symbol + '_fiat_usd']) + '{/autogreen}'),
+                ]
+
+            if self.other_cur:
+                sign = ""
+                if self.fcur_ == 'TRY':
+                    sign = '₺'
+                elif self.fcur_ == 'EUR':
+                    sign = '€'
+                if self.fcur_ == 'AZN':
+                    sign = '₼'
+                elif self.fcur_ == 'GBP':
+                    sign = '£'
+                elif self.fcur_ == 'CNY' or self.fcur_ == 'JPY' :
+                    sign = '¥'
+                elif self.fcur_ == 'AUD':
+                    sign = '$'
+                elif self.fcur_ == 'ALL':
+                    sign = 'L'
+
+                coin_line.append(Color(sign + '{autogreen}' + str("%.2f" % coins[symbol + '_fiat_my_cur']) + '{/autogreen}'))
+
+            table_data.append(coin_line)
+
+        self.balances_table_ = SingleTable(table_data)
+        self.balances_table_.inner_heading_row_border = False
+        self.balances_table_.inner_row_border = True
+        self.balances_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center'}
+        print()
+        print (self.balances_table_.table)
 
     # I just don't wanna see this lazy code in constructor lol
     def setSymbols(self):
-        self.symbols_ = {
+        self.crypto_symbols_ = {
             "adzcoin": "ADZ",
             "auroracoin": "AUR",
             "bitcoin": "BTC",
