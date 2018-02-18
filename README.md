@@ -59,6 +59,8 @@ usage: display_once.py [-h] -a api_key [-i id] [-c crypto_currency]
 
 _Coming soon._ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1&q=python+hello+world+windows) :trollface: 
 
+<br>
+
 ## Donation :dollar: :euro: :pound: :yen:
 
 <img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="20" height="20"/>   Donate **Zcash** to this address:
