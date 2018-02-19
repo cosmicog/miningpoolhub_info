@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(description="MINING\nPOOL\nHUB\nInformation Gat
 parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page')
 parser.add_argument('-i', metavar='id', help='USER ID from \'Edit Account\' page')
 parser.add_argument('-c', metavar='crypto_currency', default='BTC', help='Which exchange currency to display total in (default BTC)')
-parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total (default TRY)')
+parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total')
 args = parser.parse_args()
 
 class MphInfo:
@@ -73,11 +73,36 @@ class MphInfo:
 
         self.printDotInfo('Getting values and converting to other currencies...')
 
+        sign = ""
+        if self.other_cur:
+            if self.fcur_ == 'TRY':
+                sign = '₺'
+            elif self.fcur_ == 'EUR':
+                sign = '€'
+            if self.fcur_ == 'AZN':
+                sign = '₼'
+            elif self.fcur_ == 'GBP':
+                sign = '£'
+            elif self.fcur_ == 'CNY' or self.fcur_ == 'JPY' :
+                sign = '¥'
+            elif self.fcur_ == 'AUD':
+                sign = '$'
+            elif self.fcur_ == 'ALL':
+                sign = 'L'
+
+        if self.cur_ == 'BTC':
+            fave_crypto_sign = 'Ƀ'
+        elif self.cur_ == 'ETH':
+            fave_crypto_sign = '⧫'
+        else:
+            fave_crypto_sign = self.cur_
+
+
         json_dict = self.getMphJsonDict("getuserallbalances")
 
         coins = {}
 
-        total_fav_crypto = 0.0
+        total_fave_crypto = 0.0
 
         for coin in json_dict["getuserallbalances"]["data"]:
             symbol = self.crypto_symbols_[coin["coin"]]
@@ -94,28 +119,24 @@ class MphInfo:
             coins[symbol + "_exchange"] = balance_ex
             coin_total_balance = balance + balance_ex
 
-            total_fav_crypto += self.getValueInOtherCurrency(symbol, coin_total_balance, self.cur_, True)
+            total_fave_crypto += self.getValueInOtherCurrency(symbol, coin_total_balance, self.cur_, True)
             coins[symbol + "_fiat_usd"] = self.getValueInOtherCurrency(symbol, balance, 'USD', True)
             if self.other_cur:
                 coins[symbol + "_fiat_my_cur"] = self.getValueInOtherCurrency(symbol, balance, self.fcur_, True)
 
 
-        total_usd = self.getValueInOtherCurrency(self.cur_, total_fav_crypto, 'USD', True)
+        total_usd = self.getValueInOtherCurrency(self.cur_, total_fave_crypto, 'USD', True)
+        total_fiat = self.getValueInOtherCurrency(self.cur_, total_fave_crypto, self.fcur_, True)
         table_data = []
 
-        fave_crypto_sign = 'Ƀ'
-
-        if self.cur_ != 'BTC':
-            fave_crypto_sign = self.cur_
-
-        title =[Color('{autoyellow}Total Balance{/autoyellow}\n'+ fave_crypto_sign +'{autocyan}' + str("%.6f" % total_fav_crypto) + '{/autocyan}\n${autogreen}' + str("%.6f" % total_usd) + '{/autogreen}'),
-                Color('{autoyellow}Wallet{/autoyellow}\n{autoyellow}Confirmed+{/autoyellow}\n{autoyellow}Unconfirmed{/autoyellow}'),
-                Color('{autoyellow}Exchange+{/autoyellow}\n{autoyellow}AE_Conf+{/autoyellow}\n{autoyellow}AE_Unconf{/autoyellow}'),
-                Color('{autoyellow}Total{/autoyellow}\n{autoyellow}USD{/autoyellow}\n{autoyellow}Value{/autoyellow}'),
+        title =[Color('{autoyellow}Total Balance{/autoyellow}\n'+ fave_crypto_sign +'{autocyan}' + str("%.6f" % total_fave_crypto) + '{/autocyan}'),
+                Color('{autoyellow}Confirmed+{/autoyellow}\n{autoyellow}Unconfirmed{/autoyellow}'),
+                Color('{autoyellow}Exchange+{/autoyellow}\n{autoyellow}AE_All{/autoyellow}'),
+                Color('{autoyellow}Total{/autoyellow}\n${autocyan}' + str("%.2f" % total_usd) + '{/autocyan}'),
              ]
 
         if self.other_cur:
-            title.append(Color('{autoyellow}Total{/autoyellow}\n{autoyellow}' + self.fcur_ + '{/autoyellow}\n{autoyellow}Value{/autoyellow}'))
+            title.append(Color('{autoyellow}Total{/autoyellow}\n' + sign + '{autocyan}' + str("%.2f" % total_fiat) + '{/autocyan}'),)
 
         table_data.append(title)
 
@@ -124,28 +145,12 @@ class MphInfo:
 
             coin_line = [
                     Color('{autocyan}' + coin["coin"].title() + '{/autocyan}'),
-                    Color( str(coins[symbol + '_balance'])),
-                    Color('{autored}' + str(coins[symbol + '_exchange']) + '{/autored}'),
+                    Color( str("%.9f" % coins[symbol + '_balance'])),
+                    Color('{autored}' + str("%.6f" % coins[symbol + '_exchange']) + '{/autored}'),
                     Color('${autogreen}' + str("%.2f" % coins[symbol + '_fiat_usd']) + '{/autogreen}'),
                 ]
 
             if self.other_cur:
-                sign = ""
-                if self.fcur_ == 'TRY':
-                    sign = '₺'
-                elif self.fcur_ == 'EUR':
-                    sign = '€'
-                if self.fcur_ == 'AZN':
-                    sign = '₼'
-                elif self.fcur_ == 'GBP':
-                    sign = '£'
-                elif self.fcur_ == 'CNY' or self.fcur_ == 'JPY' :
-                    sign = '¥'
-                elif self.fcur_ == 'AUD':
-                    sign = '$'
-                elif self.fcur_ == 'ALL':
-                    sign = 'L'
-
                 coin_line.append(Color(sign + '{autogreen}' + str("%.2f" % coins[symbol + '_fiat_my_cur']) + '{/autogreen}'))
 
             table_data.append(coin_line)
