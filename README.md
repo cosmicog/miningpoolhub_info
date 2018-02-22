@@ -65,7 +65,7 @@ _Coming soon._ If you aren't python developer, you can start by [this](http://lm
 
 <img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="20" height="20"/>   Donate **Zcash** to this address:
 ```python
-t1Udd4itgQV7nirhLTjZCRrkrqU8Ez5Wbi5
+t1TDjMXwFBeTRQptCqvecRzk9xjNFiH5r83
 ```
 
 <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="20" height="20"/>   Donate **Bitcoin** to this address:
