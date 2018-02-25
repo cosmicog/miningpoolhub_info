@@ -12,13 +12,14 @@ import sys
 import signal
 from textwrap import wrap
 
-parser = argparse.ArgumentParser(description="MINING POOL HUB Information Gatherer")
-parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page\n')
+parser = argparse.ArgumentParser(description="MINING POOL HUB Information Gatherer 2018 Orhan Gazi Hafif WTFPL Licence")
+parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page.\n')
 parser.add_argument('-i', metavar='id', help='USER ID from \'Edit Account\' page\n')
 parser.add_argument('-c', metavar='crypto_currency', default='BTC', help='Which exchange currency to display total in (default BTC).\n')
 parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total.\n')
-parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES\', run the application continuously, updates in every 2 minutes\n')
+parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES\', run the application continuously, default, in every 2 minutes.\n')
 parser.add_argument('-d', metavar='dashboard_coin', help='For displaying that coin\'s dashboard info, name must be same at website, for example, for zcash.miningpoolhub.org, it must be zcash.\n')
+parser.add_argument('-r', metavar='reload_time', default='120', help='Reload time in seconds. Must be between 10 and 1800, (default 120)')
 args = parser.parse_args()
 
 def handler(signum, frame):
@@ -28,14 +29,21 @@ def handler(signum, frame):
 signal.signal(signal.SIGINT, handler)
 
 class MphInfo:
-    def __init__(self, api_key, id, currency, fiat_currency, mining_coin):
+    def __init__(self, api_key, id, currency, fiat_currency, mining_coin, reload_time):
         Windows.enable(auto_colors=True, reset_atexit=True)  # For just Windows
-        self.key_  = api_key
-        self.id_   = id
-        self.cur_  = currency
-        self.fcur_ = fiat_currency
-        self.coin_ = mining_coin
+        self.key_            = api_key
+        self.id_             = id
+        self.cur_            = currency
+        self.fcur_           = fiat_currency
+        self.coin_           = mining_coin
+        self.reload_time_    = int(reload_time)
         self.crypto_symbols_ = {}
+
+        if self.reload_time_ > 1800 or int(reload_time) < 15:
+            print('reload_time argument must be between 10 and 1800. For more info, run $ python3 display.py --help' )
+            exit()
+
+
         self.setSymbols()
 
         print(Color('{autoyellow}benafleck{/autoyellow}')) # lol ;)
@@ -69,7 +77,7 @@ class MphInfo:
 
     def displayNonStop(self):
         while True:
-            time.sleep(120)
+            time.sleep(self.reload_time_)
             self.clearLastLine()
             self.printDotInfo(str(Color(self.time_str_)))
             self.getBalances()
@@ -357,7 +365,7 @@ class MphInfo:
         }
 
 def main():
-    m = MphInfo(args.a, args.i, args.c, args.f, args.d)
+    m = MphInfo(args.a, args.i, args.c, args.f, args.d, args.r)
 
 if __name__ == '__main__':
     main()
