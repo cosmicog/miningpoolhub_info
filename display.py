@@ -10,7 +10,6 @@ import argparse
 import requests
 import sys
 import signal
-from textwrap import wrap
 
 parser = argparse.ArgumentParser(description="MINING POOL HUB Information Gatherer 2018 Orhan Gazi Hafif WTFPL Licence")
 parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page.\n')
@@ -46,7 +45,7 @@ class MphInfo:
 
         self.setSymbols()
 
-        print(Color('{autoyellow}benafleck{/autoyellow}')) # lol ;)
+        #print(Color('{autoyellow}benafleck{/autoyellow}')) # lol ;)
 
         self.time_str_ = 'Hello world, What time is it?'
 
