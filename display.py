@@ -3,19 +3,29 @@
 from __future__ import print_function
 
 import time
-
+import datetime
 from colorclass import Color, Windows
 from terminaltables import SingleTable
 import argparse
 import requests
 import sys
 
-parser = argparse.ArgumentParser(description="MINING\nPOOL\nHUB\nInformation Gatherer")
+parser = argparse.ArgumentParser(description="MINING POOL HUB Information Gatherer")
 parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page')
 parser.add_argument('-i', metavar='id', help='USER ID from \'Edit Account\' page')
-parser.add_argument('-c', metavar='crypto_currency', default='BTC', help='Which exchange currency to display total in (default BTC)')
-parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total')
+parser.add_argument('-c', metavar='crypto_currency', default='BTC', help='Which exchange currency to display total in (default BTC).')
+parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total.')
+parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES\', run the application continuously.')
 args = parser.parse_args()
+
+import signal
+import time
+
+def handler(signum, frame):
+    print (Color('\n{autogreen}Bye bye!{/autogreen}'))
+    exit()
+
+signal.signal(signal.SIGINT, handler)
 
 class MphInfo:
     def __init__(self, api_key, id, currency, fiat_currency):
@@ -27,20 +37,53 @@ class MphInfo:
         self.crypto_symbols_ = {}
         self.setSymbols()
 
+        self.time_str_ = 'Hello world? Are you there???'
+
+        self.dot_count_ = 0
+
         self.other_cur = False
         if args.f != None:
             self.other_cur = True
 
+        self.balance_table_data_ = []
         self.balances_table_ = SingleTable([])
 
-        # Print Balances
+        self.printDotInfo('Getting values and converting to currencies')
         self.getBalances()
         self.printBalances()
 
+        if args.n == 'YES':
+            self.displayNonStop()
+        else:
+            exit()
+
+    def displayNonStop(self):
+        while True:
+            time.sleep(5)
+            self.clearLastLine()
+            self.printDotInfo(str(Color(self.time_str_)))
+            self.getBalances()
+            self.printBalances()
+
+    def clearScreen(self):
+        print("\033[H\033[J")
+
+    def clearLastLine(self):
+        sys.stdout.write("\033[F")  # back to previous line
+        #sys.stdout.write("\033[K")  # Clear to the end of line
 
     def printBalances(self):
-        print()
+        self.clearScreen()
+        self.makeBalancesTable()
         print(self.balances_table_.table)
+        self.time_str_ = time.strftime('Last update: {autoyellow}%d/%m/%Y{/autoyellow} {autocyan}%H:%M:%S {/autocyan}', datetime.datetime.now().timetuple())
+        print(Color(self.time_str_))
+
+    def makeBalancesTable(self):
+        self.balances_table_ = SingleTable(self.balance_table_data_)
+        self.balances_table_.inner_heading_row_border = False
+        self.balances_table_.inner_row_border = True
+        self.balances_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center', 3: 'center'}
 
     def getMphJsonDict(self, method, coin=False, id=False):
         if coin == False and id == False:
@@ -62,17 +105,58 @@ class MphInfo:
         return value
 
     def printDotInfo(self, info=None):
+        """ ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ """
         if info == None:
-            sys.stdout.write('.')
-            sys.stdout.flush()
+            if self.dot_count_ == 0:
+                sys.stdout.write('\b\b\b ⠙ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 1:
+                sys.stdout.write('\b\b\b ⠹ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 2:
+                sys.stdout.write('\b\b\b ⠹ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 3:
+                sys.stdout.write('\b\b\b ⠸ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 4:
+                sys.stdout.write('\b\b\b ⠼ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 5:
+                sys.stdout.write('\b\b\b ⠴ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 6:
+                sys.stdout.write('\b\b\b ⠦ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 7:
+                sys.stdout.write('\b\b\b ⠧ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 8:
+                sys.stdout.write('\b\b\b ⠇ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            elif self.dot_count_ == 9:
+                sys.stdout.write('\b\b\b ⠏ \b ')
+                sys.stdout.flush()
+                self.dot_count_ += 1
+            else:
+                sys.stdout.write('\b\b\b ⠋ \b ')
+                sys.stdout.flush()
+                self.dot_count_ = 0
         else:
-            sys.stdout.write(info)
+            sys.stdout.write(info + ' ⠋ \b ')
             sys.stdout.flush()
+            self.dot_count_ = 0
 
     def getBalances(self):
-
-        self.printDotInfo('Getting values and converting to other currencies...')
-
         sign = ""
         if self.other_cur:
             if self.fcur_ == 'TRY':
@@ -96,7 +180,6 @@ class MphInfo:
             fave_crypto_sign = '⧫'
         else:
             fave_crypto_sign = self.cur_
-
 
         json_dict = self.getMphJsonDict("getuserallbalances")
 
@@ -127,7 +210,8 @@ class MphInfo:
 
         total_usd = self.getValueInOtherCurrency(self.cur_, total_fave_crypto, 'USD', True)
         total_fiat = self.getValueInOtherCurrency(self.cur_, total_fave_crypto, self.fcur_, True)
-        table_data = []
+
+        self.balance_table_data_ = []
 
         title =[Color('{autoyellow}Total Balance{/autoyellow}\n'+ fave_crypto_sign +'{autocyan}' + str("%.6f" % total_fave_crypto) + '{/autocyan}'),
                 Color('{autoyellow}Confirmed+{/autoyellow}\n{autoyellow}Unconfirmed{/autoyellow}'),
@@ -138,7 +222,7 @@ class MphInfo:
         if self.other_cur:
             title.append(Color('{autoyellow}Total{/autoyellow}\n' + sign + '{autocyan}' + str("%.2f" % total_fiat) + '{/autocyan}'),)
 
-        table_data.append(title)
+        self.balance_table_data_.append(title)
 
         for coin in json_dict["getuserallbalances"]["data"]:
             symbol = self.crypto_symbols_[coin["coin"]]
@@ -153,14 +237,9 @@ class MphInfo:
             if self.other_cur:
                 coin_line.append(Color(sign + '{autogreen}' + str("%.2f" % coins[symbol + '_fiat_my_cur']) + '{/autogreen}'))
 
-            table_data.append(coin_line)
+            self.balance_table_data_.append(coin_line)
 
-        self.balances_table_ = SingleTable(table_data)
-        self.balances_table_.inner_heading_row_border = False
-        self.balances_table_.inner_row_border = True
-        self.balances_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center'}
 
-    # I just don't wanna see this lazy code in constructor lol
     def setSymbols(self):
         self.crypto_symbols_ = {
             "adzcoin": "ADZ",
