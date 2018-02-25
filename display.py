@@ -9,17 +9,15 @@ from terminaltables import SingleTable
 import argparse
 import requests
 import sys
+import signal
 
 parser = argparse.ArgumentParser(description="MINING POOL HUB Information Gatherer")
 parser.add_argument('-a', metavar='api_key', required=True, help='API KEY from \'Edit Account\' page')
 parser.add_argument('-i', metavar='id', help='USER ID from \'Edit Account\' page')
 parser.add_argument('-c', metavar='crypto_currency', default='BTC', help='Which exchange currency to display total in (default BTC).')
 parser.add_argument('-f', metavar='fiat_currency', help=' Not needed, extra column for displaying other fiat currency total.')
-parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES\', run the application continuously.')
+parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES\', run the application continuously, updates in every minute')
 args = parser.parse_args()
-
-import signal
-import time
 
 def handler(signum, frame):
     print (Color('\n{autogreen}Bye bye!{/autogreen}'))
@@ -59,7 +57,7 @@ class MphInfo:
 
     def displayNonStop(self):
         while True:
-            time.sleep(5)
+            time.sleep(60)
             self.clearLastLine()
             self.printDotInfo(str(Color(self.time_str_)))
             self.getBalances()
