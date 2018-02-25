@@ -57,7 +57,7 @@ class MphInfo:
 
     def displayNonStop(self):
         while True:
-            time.sleep(60)
+            time.sleep(120)
             self.clearLastLine()
             self.printDotInfo(str(Color(self.time_str_)))
             self.getBalances()
