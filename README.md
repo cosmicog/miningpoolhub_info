@@ -1,7 +1,7 @@
 ## Screenshot
-Here is screenshot of info when running once:
+Here is screenshot of output when quiting from continuous one:
 
-![Screenshot of info when running once](https://user-images.githubusercontent.com/9158844/36348577-7e96893a-1483-11e8-970f-f35df4ae71a0.png)
+![Screenshot of info when running once](https://user-images.githubusercontent.com/9158844/36638403-2b31a66c-1a05-11e8-9d1d-ddf24f1a187e.png)
 
 ## Usage
 
@@ -21,36 +21,46 @@ $ cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
 
 Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and paste it into `api_key.txt` file in this repository with your favourite editor.
 
+Replace your wallet address, user id, and favourite local currency(**EUR**, **GBP**, **JPY** etc. (**TRY below**)) to `display.sh` file:
+```
+#!/bin/bash
+python3 display.py -a PASTE_YOUR_API_KEY_HERE -f TRY -i PASTE_YOUR_ID_HERE -d PLACE_YOUR_COIN
+```
 And run the single one by:
 
 ```bash
-$ python3 display_once.py -a PASTE_YOUR_API_KEY_HERE
+$ ./display.sh
 ```
 
-Or run with your extra favourite currency, for example **EUR**, **GBP**, **JPY** etc. (**TRY below**):
+Or run continuous one by (**Don't forget to edit file first**):
 
 ```bash
-$ python3 display_once.py -a PASTE_YOUR_API_KEY_HERE -f TRY
+$ ./display_continuously.sh
 ```
 
-Or continuous one:
-
-```bash
-Coming soon...
-```
 Here is all options:
-```bash
+```
 $ python3 display_once.py --help
-usage: display_once.py [-h] -a api_key [-i id] [-c crypto_currency]
-                       [-f fiat_currency]
+usage: display.py [-h] -a api_key [-i id] [-c crypto_currency]
+                  [-f fiat_currency] [-n non_stop] [-d dashboard_coin]
+                  [-r reload_time]
 
+MINING POOL HUB Information Gatherer 2018 Orhan Gazi Hafif WTFPL Licence
+
+optional arguments:
   -h, --help          show this help message and exit
-  -a api_key          API KEY from 'Edit Account' page
+  -a api_key          API KEY from 'Edit Account' page.
   -i id               USER ID from 'Edit Account' page
   -c crypto_currency  Which exchange currency to display total in (default
-                      BTC)
+                      BTC).
   -f fiat_currency    Not needed, extra column for displaying other fiat
-                      currency total (default TRY)
+                      currency total.
+  -n non_stop         Not needed, if equals 'YES', run the application
+                      continuously, default, in every 2 minutes.
+  -d dashboard_coin   For displaying that coin's dashboard info, name must be
+                      same at website, for example, for
+                      zcash.miningpoolhub.org, it must be zcash.
+  -r reload_time      Reload time in seconds.
 ```
 
 <br> 
