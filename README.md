@@ -1,7 +1,7 @@
 ## Screenshot
 Here is screenshot of output when quiting from continuous one:
 
-![Ctrl C](https://user-images.githubusercontent.com/9158844/36642705-b2e6f8ba-1a54-11e8-882d-fcc672fe93ec.png)
+![Ctrl C](https://user-images.githubusercontent.com/9158844/36647706-cef34824-1a9a-11e8-9c19-c0199a0a17e4.png)
 
 ## Usage
 
