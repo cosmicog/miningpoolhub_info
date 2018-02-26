@@ -1,7 +1,7 @@
 ## Screenshot
 Here is screenshot of output when quiting from continuous one:
 
-![Ctrl C](https://user-images.githubusercontent.com/9158844/36642705-b2e6f8ba-1a54-11e8-882d-fcc672fe93ec.png)
+![Ctrl C](https://user-images.githubusercontent.com/9158844/36647706-cef34824-1a9a-11e8-9c19-c0199a0a17e4.png)
 
 ## Usage
 
@@ -19,9 +19,9 @@ Clone this repository to your home directory or wherever you want:
 $ cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
 ```
 
-Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and paste it into `api_key.txt` file in this repository with your favourite editor.
+Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your API Key, and ID.
 
-Replace your wallet address, user id, and favourite local currency(**EUR**, **GBP**, **JPY** etc. (**TRY below**)) to `display.sh` file:
+Replace your API Key, User ID, and favourite local currency(**EUR**, **GBP**, **JPY** etc. (**TRY below**)) in `display.sh` file:
 ```
 #!/bin/bash
 python3 display.py -a PASTE_YOUR_API_KEY_HERE -f TRY -i PASTE_YOUR_ID_HERE -d PLACE_YOUR_COIN
@@ -73,23 +73,37 @@ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1
 
 ## Donations :dollar: :euro: :pound: :yen:
 
-Donate <img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="15" height="15"/> **Zcash** to this address:
+
+Donate <img src="https://avatars0.githubusercontent.com/u/3165523" width="15" height="15"/> **Ripple** to this address:
 ```
 t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
 ```
+**Tag:** `6741151`
+
 ![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
-<img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="60" height="60"/>
+<img src="https://avatars0.githubusercontent.com/u/3165523" width="60" height="60"/>
 ---
 
 <br><br>
 
-Donate <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="15" height="15"/> **Bitcoin** to this address:
+
+Donate <img src="https://avatars2.githubusercontent.com/u/16122764" width="15" height="15"/> **Zcash** to this address:
+```
+t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
+```
+![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
+<img src="https://avatars2.githubusercontent.com/u/16122764" width="60" height="60"/>
+---
+
+<br><br>
+
+Donate <img src="https://avatars2.githubusercontent.com/u/528860" width="15" height="15"/> **Bitcoin** to this address:
 
 ```
 3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
 ```
 ![bitcoin](https://user-images.githubusercontent.com/9158844/36625315-3bf470ec-192e-11e8-8dc4-e8ea15b00a6f.png)
-<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="60" height="60"/>
+<img src="https://avatars2.githubusercontent.com/u/528860" width="60" height="60"/>
 ---
 
 <br><br>
