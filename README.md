@@ -1,5 +1,4 @@
 ## Screenshot
->Up to d4 for now, I'll put comma seperated coins later, when I have a time. Also I appreciate PRs :)
 
 Here is screenshot of output when quiting from continuous one:
 
@@ -7,7 +6,7 @@ Here is screenshot of output when quiting from continuous one:
 python3 display.py -a PASTE_API_KEY_HERE -i PASTE_ID_HERE -n YES -d zcash -d2 ethereum 
 ```
 ![Ctrl C](https://user-images.githubusercontent.com/9158844/36693659-110308fa-1b4d-11e8-9094-02ad5ee5277c.png)
-
+>Up to `-d4` for now, I'll put comma seperated coins later, when I have a time. Also I appreciate PRs :)
 ## Usage
 
 ### :penguin: Ubuntu 16.04
