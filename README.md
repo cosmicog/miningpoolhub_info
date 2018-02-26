@@ -19,7 +19,7 @@ Clone this repository to your home directory or wherever you want:
 $ cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
 ```
 
-Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and paste it into `api_key.txt` file in this repository with your favourite editor.
+Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and id.
 
 Replace your wallet address, user id, and favourite local currency(**EUR**, **GBP**, **JPY** etc. (**TRY below**)) to `display.sh` file:
 ```
