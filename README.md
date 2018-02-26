@@ -72,7 +72,6 @@ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1
 <br>
 
 ## Donations :dollar: :euro: :pound: :yen:
-https://user-images.githubusercontent.com/9158844/36674161-58a2b7be-1b16-11e8-9e87-fdf0f9362a35.png
 
 
 Donate <img src="https://avatars0.githubusercontent.com/u/3165523" width="15" height="15"/> **Ripple** to this address:
