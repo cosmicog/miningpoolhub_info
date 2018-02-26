@@ -23,6 +23,15 @@ parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES
 parser.add_argument('-d', metavar='dashboard_coin', help='For displaying that coin\'s dashboard info, name must be same'
                                                          ' at website, for example, for zcash.miningpoolhub.org, it '
                                                          'must be zcash.\n')
+parser.add_argument('-d2', metavar='dashboard_coin2', help='For displaying that coin\'s dashboard info, name must be same'
+                                                         ' at website, for example, for zcash.miningpoolhub.org, it '
+                                                         'must be zcash.\n')
+parser.add_argument('-d3', metavar='dashboard_coin3', help='For displaying that coin\'s dashboard info, name must be same'
+                                                         ' at website, for example, for zcash.miningpoolhub.org, it '
+                                                         'must be zcash.\n')
+parser.add_argument('-d4', metavar='dashboard_coin4', help='For displaying that coin\'s dashboard info, name must be same'
+                                                         ' at website, for example, for zcash.miningpoolhub.org, it '
+                                                         'must be zcash.\n')
 parser.add_argument('-r', metavar='reload_time', default='120', help='Reload time in seconds. Must be between 10 and '
                                                                      '1800, (default 120)')
 args = parser.parse_args()
@@ -34,15 +43,20 @@ def handler(signum, frame):
 signal.signal(signal.SIGINT, handler)
 
 class MphInfo:
-    def __init__(self, api_key, id, currency, fiat_currency, mining_coin, reload_time):
+    def __init__(self, api_key, id, currency, fiat_currency, dcoin, d2coin, d3coin, d4coin, reload_time):
         Windows.enable(auto_colors=True, reset_atexit=True)  # For just Windows
         self.key_            = api_key
         self.id_             = id
         self.cur_            = currency
         self.fcur_           = fiat_currency
-        self.coin_           = mining_coin
+        self.coin_           = dcoin
+        self.coin2_          = d2coin
+        self.coin3_          = d3coin
+        self.coin4_          = d4coin
         self.reload_time_    = int(reload_time)
         self.crypto_symbols_ = {}
+
+        self.btc_ = 0.0 # 1 BTC in USD
 
         if self.reload_time_ > 1800 or int(reload_time) < 15:
             print('reload_time argument must be between 10 and 1800. For more info, run $ python3 display.py --help' )
@@ -58,11 +72,21 @@ class MphInfo:
         self.dot_count_ = 0
 
         self.other_cur = False
-        self.dashb_    = False
         if args.f != None:
             self.other_cur = True
+
+        self.dashb_    = False
+        self.dashb2_    = False
+        self.dashb3_    = False
+        self.dashb4_    = False
         if args.d != None:
             self.dashb_ = True
+        if args.d2 != None:
+            self.dashb2_ = True
+        if args.d3 != None:
+            self.dashb3_ = True
+        if args.d4 != None:
+            self.dashb4_ = True
 
         self.balances_table_data_ = []
         self.balances_table_     = SingleTable([])
@@ -70,6 +94,18 @@ class MphInfo:
         if self.dashb_:
             self.dashb_table_data_ = []
             self.dashb_table_      = SingleTable([])
+
+        if self.dashb2_:
+            self.dashb2_table_data_ = []
+            self.dashb2_table_      = SingleTable([])
+
+        if self.dashb3_:
+            self.dashb3_table_data_ = []
+            self.dashb3_table_      = SingleTable([])
+
+        if self.dashb4_:
+            self.dashb4_table_data_ = []
+            self.dashb4_table_      = SingleTable([])
 
         self.printDotInfo('Getting values and converting to currencies')
         self.getStats()
@@ -82,7 +118,7 @@ class MphInfo:
 
     def displayNonStop(self):
         while True:
-            time.sleep(self.reload_time_)
+            time.sleep(10)
             self.clearLastLine()
             self.printDotInfo(str(Color(self.time_str_)))
             self.getStats()
@@ -116,7 +152,16 @@ class MphInfo:
         print(self.balances_table_.table)
         if self.dashb_:
             print(self.dashb_table_.table)
-        self.time_str_ = time.strftime('Last update: {autoyellow}%d/%m/%Y{/autoyellow} {autocyan}%H:%M:%S {/autocyan}',
+        if self.dashb2_:
+            print(self.dashb2_table_.table)
+        if self.dashb3_:
+            print(self.dashb3_table_.table)
+        if self.dashb4_:
+            print(self.dashb4_table_.table)
+
+        self.time_str_  = '{autocyan}BTC{/autocyan} ${autogreen}' + str("%.2f" % self.btc_)  + '{/autogreen}'
+
+        self.time_str_ += time.strftime(' Last update: {autoyellow}%d/%m/%Y{/autoyellow} {autocyan}%H:%M:%S {/autocyan}',
                                        datetime.datetime.now().timetuple())
         print(Color(self.time_str_))
 
@@ -127,10 +172,23 @@ class MphInfo:
         self.balances_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center', 3: 'center'}
 
         if self.dashb_:
-            self.dashb_table_ = SingleTable(self.dashb_table_data_)
-            self.dashb_table_.inner_heading_row_border = False
-            self.dashb_table_.inner_row_border = True
-            self.dashb_table_.justify_columns = {0: 'center', 1: 'center'}
+            self.dashb_table_ = self.makeDashbTable(self.dashb_table_data_)
+
+        if self.dashb2_:
+            self.dashb2_table_ = self.makeDashbTable(self.dashb2_table_data_)
+
+        if self.dashb3_:
+            self.dashb3_table_ = self.makeDashbTable(self.dashb3_table_data_)
+
+        if self.dashb4_:
+            self.dashb4_table_ = self.makeDashbTable(self.dashb3_table_data_)
+
+    def makeDashbTable(self, data):
+        table = SingleTable(data)
+        table.inner_heading_row_border = False
+        table.inner_row_border = True
+        table.justify_columns = {0: 'center', 1: 'center'}
+        return table
 
     def getMphJsonDict(self, method, coin=None, id=None):
         url = "https://{}miningpoolhub.com/index.php?page=api&action={}&api_key={}&id={}"
@@ -162,57 +220,46 @@ class MphInfo:
         """ ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ """
         if info == None:
             if self.dot_count_ == 0:
-                sys.stdout.write('\b\b\b ⠙ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠙ \b ', True)
             elif self.dot_count_ == 1:
-                sys.stdout.write('\b\b\b ⠹ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠹ \b ', True)
             elif self.dot_count_ == 2:
-                sys.stdout.write('\b\b\b ⠹ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠹ \b ', True)
             elif self.dot_count_ == 3:
-                sys.stdout.write('\b\b\b ⠸ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠸ \b ', True)
             elif self.dot_count_ == 4:
-                sys.stdout.write('\b\b\b ⠼ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠼ \b ', True)
             elif self.dot_count_ == 5:
-                sys.stdout.write('\b\b\b ⠴ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠴ \b ', True)
             elif self.dot_count_ == 6:
-                sys.stdout.write('\b\b\b ⠦ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠦ \b ', True)
             elif self.dot_count_ == 7:
-                sys.stdout.write('\b\b\b ⠧ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠧ \b ', True)
             elif self.dot_count_ == 8:
-                sys.stdout.write('\b\b\b ⠇ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠇ \b ', True)
             elif self.dot_count_ == 9:
-                sys.stdout.write('\b\b\b ⠏ \b ')
-                sys.stdout.flush()
-                self.dot_count_ += 1
+                self.writeAndFlushAndCount('\b\b\b ⠏ \b ', True)
             else:
-                sys.stdout.write('\b\b\b ⠋ \b ')
-                sys.stdout.flush()
-                self.dot_count_ = 0
+                self.writeAndFlushAndCount('\b\b\b ⠋ \b ')
         else:
             sys.stdout.write(info + ' ⠋ \b ')
+
+    def writeAndFlushAndCount(self, str, plus_one = False):
+        if plus_one:
+            sys.stdout.write(str)
+            sys.stdout.flush()
+            self.dot_count_ += 1
+        else:
+            sys.stdout.write(str)
             sys.stdout.flush()
             self.dot_count_ = 0
+
 
     def getStats(self):
         sign = ""
         if self.other_cur:
+            if self.fcur_ == 'USD':
+                self.other_cur = False
             if self.fcur_ == 'TRY':
                 sign = '₺'
             elif self.fcur_ == 'EUR':
@@ -299,48 +346,56 @@ class MphInfo:
             self.balances_table_data_.append(coin_line)
 
 
-
         if self.dashb_:
-            worker_dict    = self.getMphJsonDict("getuserworkers", self.coin_, self.id_)
-            dashboard_dict = self.getMphJsonDict("getdashboarddata", self.coin_, self.id_)
+            self.dashb_table_data_ = self.getDashbStats(self.coin_, sign)
 
-            dashb_str = ''
-            symbol       = self.crypto_symbols_[self.coin_]
-            last24       = float(dashboard_dict["getdashboarddata"]["data"]["recent_credits_24hours"]["amount"])
-            last24_usd   = self.getValueInOtherCurrency(symbol, last24, 'USD', True)
-            usd_val_coin = self.getValueInOtherCurrency(symbol,      1, 'USD', True)
-            last24_btc   = self.getValueInOtherCurrency(symbol, last24, 'BTC', True)
-            usd_val_btc  = self.getValueInOtherCurrency( 'BTC',      1, 'USD', True)
-            dashb_str   += Color('{autoyellow}Last 24h {/autoyellow} {autocyan}' + str("%.8f" % last24)
-                                 + '{/autocyan} ' + symbol + '\n')
-            dashb_str   += Color('\n{autoyellow}Est. 30d:{/autoyellow}\n'
-                               + 'Ƀ{autocyan}'  + str("%.8f" % (30 * last24_btc)) + '{/autocyan}\n'
-                               + '${autogreen}' + str("%.2f" % (30 * last24_usd)) + '{/autogreen}')
+        if self.dashb2_:
+            self.dashb2_table_data_ = self.getDashbStats(self.coin2_, sign)
 
+        if self.dashb3_:
+            self.dashb3_table_data_ = self.getDashbStats(self.coin3_, sign)
 
+        if self.dashb4_:
+            self.dashb4_table_data_ = self.getDashbStats(self.coin4_, sign)
 
-            if self.other_cur:
-                last24_fiat = self.getValueInOtherCurrency(symbol, last24, self.fcur_, True)
-                dashb_str+= Color('\n' + sign + '{autogreen}' + str("%.2f" % (30 * last24_fiat)) + '{/autogreen}')
+    def getDashbStats(self, coin, fave_sign):
+        worker_dict    = self.getMphJsonDict("getuserworkers", coin, self.id_)
+        dashboard_dict = self.getMphJsonDict("getdashboarddata", coin, self.id_)
 
-            self.dashb_table_data_ = []
-            total_hashrate = 0.0
-            workers_str = ''
-            for worker in worker_dict["getuserworkers"]["data"]:
-                workers_str += Color('{autoyellow}' + worker["username"] + '{/autoyellow} {autocyan}'
-                                     + str("%.3f" % float(self.strF0(worker["hashrate"]))) + '{/autocyan} KH/s\n')
-                total_hashrate += float(self.strF0(worker["hashrate"]))
+        dashb_str = ''
+        symbol       = self.crypto_symbols_[coin]
+        last24       = float(dashboard_dict["getdashboarddata"]["data"]["recent_credits_24hours"]["amount"])
+        last24_usd   = self.getValueInOtherCurrency(symbol, last24, 'USD', True)
+        usd_val_coin = self.getValueInOtherCurrency(symbol,      1, 'USD', True)
+        last24_btc   = self.getValueInOtherCurrency(symbol, last24, 'BTC', True)
+        self.btc_    = self.getValueInOtherCurrency( 'BTC',      1, 'USD', True)
+        dashb_str   += Color('{autoyellow}Last 24h {/autoyellow} {autocyan}' + str("%.8f" % last24)
+                             + '{/autocyan} ' + symbol + '\n')
+        dashb_str   += Color('{autoyellow}Est. 30d:{/autoyellow}\n'
+                           + 'Ƀ{autocyan}'  + str("%.8f" % (30 * last24_btc)) + '{/autocyan}\n'
+                           + '${autogreen}' + str("%.2f" % (30 * last24_usd)) + '{/autogreen}')
 
-            workers_str += Color('{autoyellow}TOTAL{/autoyellow} {autocyan}' + str("%.3f" % total_hashrate)
-                                 + '{/autocyan} KH/s\n')
+        if self.other_cur:
+            last24_fiat = self.getValueInOtherCurrency(symbol, last24, self.fcur_, True)
+            dashb_str+= Color('\n' + fave_sign + '{autogreen}' + str("%.2f" % (30 * last24_fiat)) + '{/autogreen}')
 
-            workers_str += Color('\n{autocyan}BTC{/autocyan} ${autogreen}'
-                                 + str("%.2f" % usd_val_btc)  + '{/autogreen}')
-            workers_str += Color('\n{autocyan}' + symbol + '{/autocyan} ${autogreen}'
-                                 + str("%.2f" % usd_val_coin) + '{/autogreen}')
+        table = []
+        total_hashrate = 0.0
+        workers_str = ''
+        for worker in worker_dict["getuserworkers"]["data"]:
+            workers_str += Color('{autoyellow}' + worker["username"] + '{/autoyellow} {autocyan}'
+                                 + str("%.3f" % float(self.strF0(worker["hashrate"]))) + '{/autocyan} KH/s\n')
+            total_hashrate += float(self.strF0(worker["hashrate"]))
 
-            dashboard_info = [workers_str, dashb_str]
-            self.dashb_table_data_.append(dashboard_info)
+        workers_str += Color('\n{autoyellow}TOTAL{/autoyellow} {autocyan}' + str("%.3f" % total_hashrate)
+                             + '{/autocyan} KH/s\n')
+
+        workers_str += Color('{autocyan}' + symbol + '{/autocyan} ${autogreen}'
+                             + str("%.2f" % usd_val_coin) + '{/autogreen}')
+
+        dashboard_info = [workers_str, dashb_str]
+        table.append(dashboard_info)
+        return table
 
     def setSymbols(self):
         self.crypto_symbols_ = {
@@ -384,7 +439,7 @@ class MphInfo:
         }
 
 def main():
-    m = MphInfo(args.a, args.i, args.c, args.f, args.d, args.r)
+    m = MphInfo(args.a, args.i, args.c, args.f, args.d, args.d2, args.d3, args.d4, args.r)
 
 if __name__ == '__main__':
     main()
