@@ -72,24 +72,39 @@ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1
 <br>
 
 ## Donations :dollar: :euro: :pound: :yen:
+https://user-images.githubusercontent.com/9158844/36674161-58a2b7be-1b16-11e8-9e87-fdf0f9362a35.png
 
-Donate <img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="15" height="15"/> **Zcash** to this address:
+
+Donate <img src="https://avatars0.githubusercontent.com/u/3165523" width="15" height="15"/> **Ripple** to this address:
 ```
 t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
 ```
+**Tag:** `6741151`
+
 ![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
-<img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="60" height="60"/>
+<img src="https://avatars0.githubusercontent.com/u/3165523" width="60" height="60"/>
 ---
 
 <br><br>
 
-Donate <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="15" height="15"/> **Bitcoin** to this address:
+
+Donate <img src="https://avatars2.githubusercontent.com/u/16122764" width="15" height="15"/> **Zcash** to this address:
+```
+t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
+```
+![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
+<img src="https://avatars2.githubusercontent.com/u/16122764" width="60" height="60"/>
+---
+
+<br><br>
+
+Donate <img src="https://avatars2.githubusercontent.com/u/528860" width="15" height="15"/> **Bitcoin** to this address:
 
 ```
 3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
 ```
 ![bitcoin](https://user-images.githubusercontent.com/9158844/36625315-3bf470ec-192e-11e8-8dc4-e8ea15b00a6f.png)
-<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="60" height="60"/>
+<img src="https://avatars2.githubusercontent.com/u/528860" width="60" height="60"/>
 ---
 
 <br><br>
