@@ -21,7 +21,7 @@ $ cd ~ && git clone https://github.com/cosmicog/miningpoolhub_info
 
 Go to [Mining Pool Hub - Edit Account](https://miningpoolhub.com/?page=account&action=edit) page and copy your api key, and id.
 
-Replace your wallet address, user id, and favourite local currency(**EUR**, **GBP**, **JPY** etc. (**TRY below**)) to `display.sh` file:
+Replace your wallet address, user id, and favourite local currency(**EUR**, **GBP**, **JPY** etc. (**TRY below**)) in `display.sh` file:
 ```
 #!/bin/bash
 python3 display.py -a PASTE_YOUR_API_KEY_HERE -f TRY -i PASTE_YOUR_ID_HERE -d PLACE_YOUR_COIN
