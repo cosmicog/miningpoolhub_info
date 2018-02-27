@@ -159,7 +159,7 @@ class MphInfo:
         if self.dashb4_:
             print(self.dashb4_table_.table)
 
-        self.time_str_  = '{autocyan}BTC{/autocyan} ${autogreen}' + str("%.2f" % self.btc_)  + '{/autogreen}'
+        self.time_str_  = ' {autocyan}BTC{/autocyan} ${autogreen}' + str("%.2f" % self.btc_)  + '{/autogreen}'
 
         self.time_str_ += time.strftime(' Last update: {autoyellow}%d/%m/%Y{/autoyellow} {autocyan}%H:%M:%S {/autocyan}',
                                        datetime.datetime.now().timetuple())
@@ -200,7 +200,17 @@ class MphInfo:
             url=url.format(coin + '.', method, self.key_, id)
 
         response = requests.get(url, timeout=10)
-        json_dict = response.json()
+        json_dict = ''
+        try:
+            json_dict = response.json()
+
+        except ValueError:
+            print()
+            print()
+            print(Color('{autored}Website didn\'t response with a valid json:{/autored}'))
+            print(response.content)
+            exit()
+
         return json_dict
 
     def getValueInOtherCurrency(self, curency, amount, other_currency, use_dot=None):
