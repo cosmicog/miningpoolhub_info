@@ -200,7 +200,7 @@ class MphInfo:
             url=url.format(coin + '.', method, self.key_, id)
 
         response = requests.get(url, timeout=10)
-        json_dict = ''
+        json_dict = {}
         try:
             json_dict = response.json()
 
@@ -294,6 +294,7 @@ class MphInfo:
         else:
             fave_crypto_sign = self.cur_
 
+        balances_dict = {}
         balances_dict  = self.getMphJsonDict("getuserallbalances")
 
         coins = {}
