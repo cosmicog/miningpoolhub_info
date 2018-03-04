@@ -80,11 +80,11 @@ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1
 
 Donate <img src="https://avatars0.githubusercontent.com/u/3165523" width="15" height="15"/> **Ripple** to this address:
 ```
-t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
+rNEygqkMv4Vnj8M2eWnYT1TDnV1Sc1X5SN
 ```
 **Tag:** `6741151`
 
-![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
+![ripple](https://user-images.githubusercontent.com/9158844/36674161-58a2b7be-1b16-11e8-9e87-fdf0f9362a35.png)
 <img src="https://avatars0.githubusercontent.com/u/3165523" width="60" height="60"/>
 ---
 
